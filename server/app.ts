@@ -1,33 +1,54 @@
 import { Hono } from "./deps.ts";
+import { Note } from "./types.ts";
 
 const app = new Hono();
 
-app.get("/legacy/bookmarks", async (c) => {
+app.get("/notes/:uuid", async (c) => {
+  const { uuid } = c.req.param();
+
   const kv = await Deno.openKv();
 
   await kv
-    .get(["legacy", "bookmarks"])
-    .then((result) => c.json({ bookmarks: result.value }))
+    .get<Omit<Note, "uuid">>(["notes", uuid])
+    .then((note) => {
+      c.json({ note });
+    })
     .catch(console.error);
 });
 
-app.post("/legacy/bookmarks", async (c) => {
-  const json: {
-    bookmarks: {
-      url: string;
+app.get("/notes", async (c) => {
+  const kv = await Deno.openKv();
+
+  const entries = kv.list<Omit<Note, "uuid">>({ prefix: ["notes"] });
+
+  const res: {
+    notes: {
+      uuid: string;
+      title: string;
+      body: string;
       createdAt: string;
       updatedAt: string;
     }[];
-  } = await c.req.json();
+  } = { notes: [] };
 
-  const { bookmarks } = json;
+  for await (const result of entries) {
+    try {
+      const { key, value } = result;
 
-  const kv = await Deno.openKv();
+      const note = {
+        uuid: key[1].toString(),
+        ...value,
+        createdAt: value.createdAt.toLocaleString(),
+        updatedAt: value.updatedAt.toLocaleString(),
+      };
 
-  await kv.set(["legacy", "bookmarks"], bookmarks).then(() => {
-    c.status(201);
-    c.json({ bookmarks });
-  });
+      res.notes = [...res.notes, note];
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  c.json(res);
 });
 
 export default app;
