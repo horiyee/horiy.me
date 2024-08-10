@@ -11,6 +11,9 @@ const AboutPage: React.FC = () => {
             <li>
               <Link href={pageRoutes.index}>horiy.me</Link>
             </li>
+            <li>
+              <Link href={pageRoutes.about}>About</Link>
+            </li>
           </ul>
         </nav>
       </header>
