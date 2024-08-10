@@ -1,3 +1,5 @@
-export default function Page() {
-  return <h1>Hello, Next.js!</h1>;
-}
+const Page: React.FC = () => {
+  return <h1>horiyblog</h1>;
+};
+
+export default Page;
