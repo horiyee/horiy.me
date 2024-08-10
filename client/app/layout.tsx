@@ -1,4 +1,5 @@
 import "@picocss/pico";
+import React from "react";
 
 type Props = {
   children: React.ReactNode;
