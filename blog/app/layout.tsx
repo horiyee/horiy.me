@@ -7,9 +7,7 @@ type Props = {
 const RootLayout: React.FC<Props> = ({ children }) => {
   return (
     <html lang="ja">
-      <body>
-        <main className="container">{children}</main>
-      </body>
+      <body>{children}</body>
     </html>
   );
 };
