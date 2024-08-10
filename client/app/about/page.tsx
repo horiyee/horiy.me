@@ -1,12 +1,26 @@
+import Link from "next/link";
 import { ProfileSection } from "./ProfileSection";
+import { pageRoutes } from "../config/pageRoutes";
 
 const AboutPage: React.FC = () => {
   return (
-    <div>
-      <h1>About Me</h1>
+    <>
+      <header className="container">
+        <nav aria-label="breadcrumb">
+          <ul>
+            <li>
+              <Link href={pageRoutes.index}>horiy.me</Link>
+            </li>
+          </ul>
+        </nav>
+      </header>
 
-      <ProfileSection />
-    </div>
+      <main className="container">
+        <h1>About Me</h1>
+
+        <ProfileSection />
+      </main>
+    </>
   );
 };
 

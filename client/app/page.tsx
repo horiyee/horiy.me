@@ -1,8 +1,8 @@
 const Page: React.FC = () => {
   return (
-    <div>
+    <main className="container">
       <h1>horiy.me</h1>
-    </div>
+    </main>
   );
 };
 
