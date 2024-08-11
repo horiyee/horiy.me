@@ -1,5 +1,5 @@
 export type BlogPost = {
-  uuid: string;
+  id: string;
   title: string;
   body: string;
   createdAt: Date;
