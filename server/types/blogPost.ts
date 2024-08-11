@@ -1,4 +1,4 @@
-export type Note = {
+export type BlogPost = {
   uuid: string;
   title: string;
   body: string;

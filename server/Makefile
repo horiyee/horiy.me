@@ -1,3 +1,3 @@
-.PHONY: serve
-serve:
-	deno serve app.ts
+.PHONY: run
+run:
+	deno run --allow-net --unstable-kv app.ts
