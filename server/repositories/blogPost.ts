@@ -1,5 +1,10 @@
 import { BlogPost } from "../types/blogPost.ts";
 
+export type BlogPostRepository = {
+  fetchAll: () => Promise<BlogPost[]>;
+  create: (blogPost: BlogPost) => Promise<void>;
+};
+
 export const BlogPostRepository = (kv: Deno.Kv) => {
   const fetchAll = async () => {
     const entries = kv.list<Omit<BlogPost, "id">>({ prefix: ["blogPosts"] });

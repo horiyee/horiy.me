@@ -1,10 +1,12 @@
 import { assertEquals } from "../../deps.ts";
 import { assert } from "../../deps.ts";
+import { BlogPostRepository } from "../../repositories/blogPost.ts";
 import { BlogPostService } from "../../services/blogPost.ts";
 import { BlogPost } from "../../types/blogPost.ts";
+import { testKv } from "../index.ts";
 
-const kv = await Deno.openKv("./tests/test.db");
-const blogPostService = BlogPostService(kv);
+const blogPostRepository = BlogPostRepository(testKv);
+const blogPostService = BlogPostService(blogPostRepository);
 
 const blogPosts: BlogPost[] = [
   {

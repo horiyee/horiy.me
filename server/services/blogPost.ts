@@ -6,9 +6,7 @@ export type BlogPostService = {
   create: (blogPost: Omit<BlogPost, "id">) => Promise<string>;
 };
 
-export const BlogPostService = (kv: Deno.Kv) => {
-  const blogPostRepository = BlogPostRepository(kv);
-
+export const BlogPostService = (blogPostRepository: BlogPostRepository) => {
   const fetchAll = async () => {
     const blogPosts = await blogPostRepository.fetchAll();
 

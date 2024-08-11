@@ -1,11 +1,14 @@
 import { BlogPostController } from "../controllers/blogPost.ts";
 import { Router } from "../deps.ts";
+import { BlogPostRepository } from "../repositories/blogPost.ts";
 import { BlogPostService } from "../services/blogPost.ts";
 
 const router = new Router();
 
 const kv = await Deno.openKv();
-const blogPostService = BlogPostService(kv);
+const blogPostRepository = BlogPostRepository(kv);
+const blogPostService = BlogPostService(blogPostRepository);
+
 const blogPostController = BlogPostController(blogPostService);
 
 const v1r = router.prefix("/v1");
