@@ -25,6 +25,18 @@ Deno.test("create() はblogPostをDeno KVに保存してuuidを返す", async ()
   blogPosts[0].id = id;
 });
 
+Deno.test(
+  "update() は既存のblogPostを更新してDeno KVに保存できる",
+  async () => {
+    blogPosts[0].updatedAt = new Date();
+    await blogPostService.update(blogPosts[0]);
+
+    const results = await blogPostService.fetchAll();
+    const blogPost = results.find((result) => result.id === blogPosts[0].id);
+    assertEquals(blogPost, blogPosts[0]);
+  },
+);
+
 Deno.test("fetchAll() はblogPostをDeno KVから全取得して返す", async () => {
   const results = await blogPostService.fetchAll();
   assert(results.length > 0);

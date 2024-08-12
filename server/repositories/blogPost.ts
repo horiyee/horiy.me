@@ -1,11 +1,25 @@
 import { BlogPost } from "../types/blogPost.ts";
 
 export type BlogPostRepository = {
+  fetch: (id: string) => Promise<BlogPost | null>;
   fetchAll: () => Promise<BlogPost[]>;
-  create: (blogPost: BlogPost) => Promise<void>;
+  put: (blogPost: BlogPost) => Promise<void>;
 };
 
 export const BlogPostRepository = (kv: Deno.Kv) => {
+  const fetch = async (id: string) => {
+    const blogPost = await kv.get<Omit<BlogPost, "id">>(["blogPosts", id]);
+
+    if (blogPost.versionstamp !== null) {
+      return {
+        id,
+        ...blogPost.value,
+      };
+    } else {
+      return null;
+    }
+  };
+
   const fetchAll = async () => {
     const entries = kv.list<Omit<BlogPost, "id">>({ prefix: ["blogPosts"] });
 
@@ -29,18 +43,18 @@ export const BlogPostRepository = (kv: Deno.Kv) => {
     return results.blogPosts;
   };
 
-  const create = async (blogPost: BlogPost) => {
+  const put = async (blogPost: BlogPost) => {
     const { id, ...rest } = blogPost;
 
     await kv
       .set(["blogPosts", id], rest)
       .then(() => {
-        console.log(`Blog post created. id = ${id}`);
+        console.log(`Blog post updated. id = ${id}`);
       })
       .catch((err) => {
-        console.error(`Failed to create blog post: ${err}`);
+        console.error(`Failed to update blog post: ${err}`);
       });
   };
 
-  return { fetchAll, create };
+  return { fetch, fetchAll, put };
 };

@@ -25,7 +25,7 @@ export const BlogPostController = (blogPostService: BlogPostService) => {
       createdAt: string;
       updatedAt: string;
     } = await ctx.request.body.json().catch((err) => {
-      console.error(err);
+      console.error(`Failed to parse json body: ${err}`);
 
       ctx.response.status = Status.BadRequest;
       ctx.response.type = "json";
@@ -50,5 +50,36 @@ export const BlogPostController = (blogPostService: BlogPostService) => {
     ctx.response.body = { id };
   };
 
-  return { index, create };
+  const update = async (ctx: RouterContext<"/blog_posts/:id">) => {
+    const json: {
+      title: string;
+      body: string;
+      createdAt: string;
+      updatedAt: string;
+    } = await ctx.request.body.json().catch((err) => {
+      console.error(`Failed to parse json body: ${err}`);
+
+      ctx.response.status = Status.BadRequest;
+      ctx.response.type = "json";
+
+      ctx.response.body = { error: "Invalid request body" };
+    });
+
+    const { id } = ctx.params;
+    const { title, body } = json;
+    const createdAt = new Date(json.createdAt);
+    const updatedAt = new Date(json.updatedAt);
+
+    await blogPostService.update({
+      id,
+      title,
+      body,
+      createdAt,
+      updatedAt,
+    });
+
+    ctx.response.status = Status.NoContent;
+  };
+
+  return { index, create, update };
 };
