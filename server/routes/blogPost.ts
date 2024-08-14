@@ -1,20 +1,30 @@
-import { BlogPostController } from "../controllers/blogPost.ts";
+import {
+  BlogPostAdminController,
+  BlogPostController,
+} from "../controllers/blogPost.ts";
 import { Router } from "../deps.ts";
 import { BlogPostRepository } from "../repositories/blogPost.ts";
 import { BlogPostService } from "../services/blogPost.ts";
 
-const router = new Router();
+export const BlogPostRoutes = (router: Router, kv: Deno.Kv) => {
+  const blogPostRepository = BlogPostRepository(kv);
+  const blogPostService = BlogPostService(blogPostRepository);
+  const blogPostController = BlogPostController(blogPostService);
 
-const kv = await Deno.openKv();
-const blogPostRepository = BlogPostRepository(kv);
-const blogPostService = BlogPostService(blogPostRepository);
+  const v1r = router.prefix("/v1");
 
-const blogPostController = BlogPostController(blogPostService);
+  v1r.get("/blog_posts", blogPostController.index);
 
-const v1r = router.prefix("/v1");
+  return v1r;
+};
 
-v1r.get("/blog_posts", blogPostController.index);
-v1r.post("/blog_posts", blogPostController.create);
-v1r.put("/blog_posts/:id", blogPostController.update);
+export const blogPostAdminRoutes = (router: Router, kv: Deno.Kv) => {
+  const blogPostRepository = BlogPostRepository(kv);
+  const blogPostService = BlogPostService(blogPostRepository);
+  const blogPostAdminController = BlogPostAdminController(blogPostService);
 
-export default router;
+  router.post("/blog_posts", blogPostAdminController.create);
+  router.put("/blog_posts/:id", blogPostAdminController.update);
+
+  return router;
+};

@@ -36,7 +36,7 @@ export const BlogPostRepository = (kv: Deno.Kv) => {
 
         results.blogPosts = [...results.blogPosts, blogPost];
       } catch (err) {
-        console.error(`Failed to fetch blog posts: ${err}`);
+        console.error(`Failed to fetch blog post: ${err}`);
       }
     }
 

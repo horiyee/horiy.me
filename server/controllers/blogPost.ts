@@ -18,6 +18,10 @@ export const BlogPostController = (blogPostService: BlogPostService) => {
     };
   };
 
+  return { index };
+};
+
+export const BlogPostAdminController = (blogPostService: BlogPostService) => {
   const create = async (ctx: RouterContext<"/blog_posts">) => {
     const json: {
       title: string;
@@ -81,5 +85,5 @@ export const BlogPostController = (blogPostService: BlogPostService) => {
     ctx.response.status = Status.NoContent;
   };
 
-  return { index, create, update };
+  return { create, update };
 };
