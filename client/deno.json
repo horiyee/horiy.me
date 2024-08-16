@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxFragmentFactory": "React.Fragment",
+    "jsxImportSource": "npm:hono@4.5.5/jsx"
+  }
+}
