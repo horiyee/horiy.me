@@ -1,4 +1,4 @@
-import { Hono } from "npm:hono@4.5.5";
+import { Hono } from "./deps.ts";
 
 const app = new Hono();
 
